@@ -256,6 +256,12 @@
         <PreferenceScreen 
             android:key="pref_cat_statusbar_colors"
             android:title="@string/pref_cat_statusbar_colors_title">
+            
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="pref_disable_statusbar_bgcolor2"
+                android:summary="@string/disable_status_bar_overrides_summary"
+                android:title="@string/disable_status_bar_overrides_title" />
 
             <net.margaritov.preference.colorpicker.ColorPickerPreference 
                 android:key="pref_statusbar_bgcolor2"
@@ -322,6 +328,7 @@
                 interval="1"
                 monitorBoxEnabled="true"
                 monitorBoxUnit="%" />
+            
 
         </PreferenceScreen>
 

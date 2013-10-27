@@ -120,6 +120,7 @@ public class GravityBoxSettings extends Activity implements GravityBoxResultRece
     public static final String PREF_CAT_KEY_STATUSBAR = "pref_cat_statusbar";
     public static final String PREF_CAT_KEY_STATUSBAR_QS = "pref_cat_statusbar_qs";
     public static final String PREF_KEY_STATUSBAR_BGCOLOR = "pref_statusbar_bgcolor2";
+    public static final String PREF_KEY_DISABLE_STATUSBAR_BGCOLOR = "pref_disable_statusbar_bgcolor2";
     public static final String PREF_KEY_STATUSBAR_COLOR_FOLLOW_STOCK_BATTERY = "pref_sbcolor_follow_stock_battery";
     public static final String PREF_KEY_STATUSBAR_ICON_COLOR_ENABLE = "pref_statusbar_icon_color_enable";
     public static final String PREF_KEY_STATUSBAR_ICON_COLOR = "pref_statusbar_icon_color";
@@ -576,6 +577,7 @@ public class GravityBoxSettings extends Activity implements GravityBoxResultRece
         private AlertDialog mDialog;
         private MultiSelectListPreference mQuickSettings;
         private ColorPickerPreference mStatusbarBgColor;
+        private CheckBoxPreference mDisableStatusBarColorChanges;
         private Preference mPrefAboutGb;
         private Preference mPrefAboutXposed;
         private Preference mPrefAboutDonate;
@@ -694,6 +696,8 @@ public class GravityBoxSettings extends Activity implements GravityBoxResultRece
             mSignalIconAutohide = (MultiSelectListPreference) findPreference(PREF_KEY_SIGNAL_ICON_AUTOHIDE);
             mQuickSettings = (MultiSelectListPreference) findPreference(PREF_KEY_QUICK_SETTINGS);
             mStatusbarBgColor = (ColorPickerPreference) findPreference(PREF_KEY_STATUSBAR_BGCOLOR);
+            mDisableStatusBarColorChanges = (CheckBoxPreference) findPreference(PREF_KEY_DISABLE_STATUSBAR_BGCOLOR);
+            
 
             mPrefAboutGb = (Preference) findPreference(PREF_KEY_ABOUT_GRAVITYBOX);
             
@@ -1048,6 +1052,10 @@ public class GravityBoxSettings extends Activity implements GravityBoxResultRece
             value = mPrefs.getBoolean(PREF_KEY_UNPLUG_TURNS_ON_SCREEN, sSystemProperties.unplugTurnsOnScreen);
             mPrefs.edit().putBoolean(PREF_KEY_UNPLUG_TURNS_ON_SCREEN, value).commit();
             mPrefUnplugTurnsOnScreen.setChecked(value);
+            
+            if (!mPrefs.contains(PREF_KEY_DISABLE_STATUSBAR_BGCOLOR)) {
+            	mDisableStatusBarColorChanges.setChecked(Utils.isXperiaDevice());
+            }
         }
 
         private void updatePreferences(String key) {

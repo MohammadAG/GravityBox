@@ -189,6 +189,9 @@ public class TransparencyManager implements BroadcastSubReceiver {
     }
 
     private void doTransparentUpdate() {
+    	if (Utils.isXperiaDevice())
+    		return;
+    	
         mIsKeyguardShowing = isKeyguardShowing();
         mIsHomeShowing = isLauncherShowing();
 
@@ -197,7 +200,7 @@ public class TransparencyManager implements BroadcastSubReceiver {
             navAnim = createAnimation(mNavbarInfo, (View)mNavbar);
         }
         if (mStatusbar != null) {
-            sbAnim = createAnimation(mStatusbarInfo, (View)mStatusbar);
+        	sbAnim = createAnimation(mStatusbarInfo, (View)mStatusbar);
         }
         if (navAnim != null && sbAnim != null) {
             AnimatorSet set = new AnimatorSet();

@@ -18,6 +18,8 @@ package com.ceco.gm2.gravitybox;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ceco.gm2.gravitybox.GravityBoxSettings.PrefsFragment;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -330,8 +332,12 @@ public class ModStatusbarColor {
                     mBatteryController = XposedHelpers.getObjectField(param.thisObject, "mBatteryController");
                     prefs.reload();
                     int bgColor = prefs.getInt(GravityBoxSettings.PREF_KEY_STATUSBAR_BGCOLOR, Color.BLACK);
-                    setStatusbarBgColor(bgColor);
-                    applyIconColors();
+                    boolean disableStatusBarColorChange = 
+                    		prefs.getBoolean(GravityBoxSettings.PREF_KEY_DISABLE_STATUSBAR_BGCOLOR, Utils.isXperiaDevice());
+                    if (!disableStatusBarColorChange) {
+	                    setStatusbarBgColor(bgColor);
+	                    applyIconColors();
+                	}
 
                     Intent i = new Intent(ACTION_PHONE_STATUSBAR_VIEW_MADE);
                     context.sendBroadcast(i);
