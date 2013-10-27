@@ -137,7 +137,7 @@
 
     <!--  Statusbar background color -->
     <string name="statusbar_bgcolor_title">Statusbar background color</string>
-    <string name="statusbar_bgcolor_summary">Allows to set statusbar background color and transparency</string>
+    <string name="statusbar_bgcolor_summary">Allows to set statusbar background color</string>
 
     <!--  Fix speech settings -->
     <string name="fix_tts_settings_title">Fix speech settings</string>
@@ -380,7 +380,6 @@
     <!-- Pie Controls settings -->
     <string name="pie_control_title">Pie controls</string>
     <string name="pie_control_enable_title">Enable pie controls</string>
-    <string name="pie_control_search_title">Show search button</string>
     <string name="pie_control_size_title">Navigation key size</string>
     <string name="pie_control_trigger_positions_title">Trigger positions</string>
     <string name="pie_control_trigger_left">Left screen border</string>
@@ -724,5 +723,23 @@
     <string name="signal_color_mode_disabled">Do not apply color</string>
     <string name="disable_status_bar_overrides_title">Disable color changes</string>
     <string name="disable_status_bar_overrides_summary">Useful for devices with color-changing status bar (e.g Xperia devices)</string>
+
+    <!-- Application launcher -->
+    <string name="pref_cat_app_launcher_title">Application launcher</string>
+    <string name="pref_cat_app_launcher_summary">Dialog allowing to define up to 8 apps which can be assigned as HW Key Action or used as additional navigation bar key</string>
+    <string name="pref_app_launcher_slot_title">Application slot %d</string>
+    <string name="app_launcher_no_apps">No apps assigned. Use GravityBox / Application launcher menu to assign apps.</string>
+
+    <!-- Navigation bar app launcher key -->
+    <string name="pref_navbar_launcher_enable_title">Show app launcher key</string>
+
+    <!-- HW Key Actions: application launcher -->
+    <string name="hwkey_action_app_launcher">Show application launcher</string>
+
+    <!-- Pie custom key -->
+    <string name="pref_pie_control_custom_key_title">Show custom key</string>
+    <string name="pie_custom_key_off">Disabled</string>
+    <string name="pie_custom_key_search">Search</string>
+    <string name="pie_custom_key_app_launcher">Application launcher</string>
 
 </resources>

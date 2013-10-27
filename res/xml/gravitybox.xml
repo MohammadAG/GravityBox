@@ -391,10 +391,12 @@
                 android:entryValues="@array/pie_controls_enable_values"
                 android:defaultValue="0" />
 
-            <CheckBoxPreference 
-                android:key="pref_pie_control_search"
-                android:title="@string/pie_control_search_title"
-                android:defaultValue="false" />
+            <ListPreference 
+                android:key="pref_pie_control_custom_key"
+                android:title="@string/pref_pie_control_custom_key_title"
+                android:entries="@array/pie_custom_key_entries"
+                android:entryValues="@array/pie_custom_key_values"
+                android:defaultValue="0" />
 
             <CheckBoxPreference 
                 android:key="pref_pie_control_menu"
@@ -575,6 +577,11 @@
             android:key="pref_navbar_enable"
             android:title="@string/pref_navbar_enable_title"
             android:summary="@string/pref_navbar_enable_summary" />
+
+        <CheckBoxPreference 
+            android:key="pref_navbar_launcher_enable"
+            android:title="@string/pref_navbar_launcher_enable_title"
+            android:defaultValue="false" />
 
         <com.ceco.gm2.gravitybox.preference.SeekBarPreference
             android:key="pref_navbar_height"
@@ -992,6 +999,15 @@
                 android:defaultValue="1000" />
 
         </PreferenceCategory>
+
+    </PreferenceScreen>
+
+    <PreferenceScreen 
+        android:key="pref_cat_app_launcher"
+        android:title="@string/pref_cat_app_launcher_title"
+        android:summary="@string/pref_cat_app_launcher_summary">
+
+        <!-- Application slots will be generated dynamically at runtime -->
 
     </PreferenceScreen>
 

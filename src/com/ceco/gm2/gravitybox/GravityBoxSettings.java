@@ -242,6 +242,7 @@ public class GravityBoxSettings extends Activity implements GravityBoxResultRece
     public static final int HWKEY_ACTION_MENU = 9;
     public static final int HWKEY_ACTION_EXPANDED_DESKTOP = 10;
     public static final int HWKEY_ACTION_TORCH = 11;
+    public static final int HWKEY_ACTION_APP_LAUNCHER = 12;
     public static final int HWKEY_DOUBLETAP_SPEED_DEFAULT = 400;
     public static final int HWKEY_KILL_DELAY_DEFAULT = 1000;
     public static final String ACTION_PREF_HWKEY_MENU_LONGPRESS_CHANGED = "gravitybox.intent.action.HWKEY_MENU_LONGPRESS_CHANGED";
@@ -290,15 +291,18 @@ public class GravityBoxSettings extends Activity implements GravityBoxResultRece
     public static final String EXTRA_BG_ALPHA = "bgAlpha";
 
     public static final String PREF_KEY_PIE_CONTROL_ENABLE = "pref_pie_control_enable2";
-    public static final String PREF_KEY_PIE_CONTROL_SEARCH = "pref_pie_control_search";
+    public static final String PREF_KEY_PIE_CONTROL_CUSTOM_KEY = "pref_pie_control_custom_key";
     public static final String PREF_KEY_PIE_CONTROL_MENU = "pref_pie_control_menu";
     public static final String PREF_KEY_PIE_CONTROL_TRIGGERS = "pref_pie_control_trigger_positions";
     public static final String PREF_KEY_PIE_CONTROL_TRIGGER_SIZE = "pref_pie_control_trigger_size";
     public static final String PREF_KEY_PIE_CONTROL_SIZE = "pref_pie_control_size";
     public static final String PREF_KEY_HWKEYS_DISABLE = "pref_hwkeys_disable";
+    public static final int PIE_CUSTOM_KEY_OFF = 0;
+    public static final int PIE_CUSTOM_KEY_SEARCH = 1;
+    public static final int PIE_CUSTOM_KEY_APP_LAUNCHER = 2;
     public static final String ACTION_PREF_PIE_CHANGED = "gravitybox.intent.action.PREF_PIE_CHANGED";
     public static final String EXTRA_PIE_ENABLE = "pieEnable";
-    public static final String EXTRA_PIE_SEARCH = "pieSearch";
+    public static final String EXTRA_PIE_CUSTOM_KEY_MODE = "pieCustomKeyMode";
     public static final String EXTRA_PIE_MENU = "pieMenu";
     public static final String EXTRA_PIE_TRIGGERS = "pieTriggers";
     public static final String EXTRA_PIE_TRIGGER_SIZE = "pieTriggerSize";
@@ -368,11 +372,13 @@ public class GravityBoxSettings extends Activity implements GravityBoxResultRece
     public static final String PREF_KEY_NAVBAR_HEIGHT_LANDSCAPE = "pref_navbar_height_landscape";
     public static final String PREF_KEY_NAVBAR_WIDTH = "pref_navbar_width";
     public static final String PREF_KEY_NAVBAR_MENUKEY = "pref_navbar_menukey";
+    public static final String PREF_KEY_NAVBAR_LAUNCHER_ENABLE = "pref_navbar_launcher_enable";
     public static final String ACTION_PREF_NAVBAR_CHANGED = "gravitybox.intent.action.ACTION_NAVBAR_CHANGED";
     public static final String EXTRA_NAVBAR_HEIGHT = "navbarHeight";
     public static final String EXTRA_NAVBAR_HEIGHT_LANDSCAPE = "navbarHeightLandscape";
     public static final String EXTRA_NAVBAR_WIDTH = "navbarWidth";
     public static final String EXTRA_NAVBAR_MENUKEY = "navbarMenukey";
+    public static final String EXTRA_NAVBAR_LAUNCHER_ENABLE = "navbarLauncherEnable";
 
     public static final String PREF_KEY_LOCKSCREEN_TARGETS_ENABLE = "pref_lockscreen_ring_targets_enable";
     public static final String PREF_KEY_LOCKSCREEN_TARGETS_APP[] = new String[] {
@@ -429,7 +435,15 @@ public class GravityBoxSettings extends Activity implements GravityBoxResultRece
     public static final String EXTRA_DT_ENABLE = "dtEnable";
     public static final String EXTRA_DT_POSITION = "dtPosition";
     public static final String EXTRA_DT_SIZE = "dtSize";
-     
+
+    public static final String PREF_CAT_KEY_APP_LAUNCHER = "pref_cat_app_launcher";
+    public static final List<String> PREF_KEY_APP_LAUNCHER_SLOT = new ArrayList<String>(Arrays.asList(
+            "pref_app_launcher_slot0", "pref_app_launcher_slot1", "pref_app_launcher_slot2",
+            "pref_app_launcher_slot3", "pref_app_launcher_slot4", "pref_app_launcher_slot5",
+            "pref_app_launcher_slot6", "pref_app_launcher_slot7"));
+    public static final String ACTION_PREF_APP_LAUNCHER_CHANGED = "gravitybox.intent.action.APP_LAUNCHER_CHANGED";
+    public static final String EXTRA_APP_LAUNCHER_SLOT = "appLauncherSlot";
+    public static final String EXTRA_APP_LAUNCHER_APP = "appLauncherApp";
 
     private static final List<String> rebootKeys = new ArrayList<String>(Arrays.asList(
             PREF_KEY_FIX_DATETIME_CRASH,
@@ -677,6 +691,10 @@ public class GravityBoxSettings extends Activity implements GravityBoxResultRece
         private CheckBoxPreference mPrefVolumePanelExpandable;
         private CheckBoxPreference mPrefVolumePanelAutoexpand;
         private CheckBoxPreference mPrefHomeDoubletapDisable;
+        private PreferenceScreen mPrefCatAppLauncher;
+        private CheckBoxPreference mPrefNavbarLauncherEnable;
+        private AppPickerPreference[] mPrefAppLauncherSlot;
+        private ListPreference mPrefPieCustomKey;
 
         @SuppressWarnings("deprecation")
         @Override
@@ -787,6 +805,7 @@ public class GravityBoxSettings extends Activity implements GravityBoxResultRece
 
             mPrefPieEnabled = (ListPreference) findPreference(PREF_KEY_PIE_CONTROL_ENABLE);
             mPrefPieHwKeysDisabled = (CheckBoxPreference) findPreference(PREF_KEY_HWKEYS_DISABLE);
+            mPrefPieCustomKey = (ListPreference) findPreference(PREF_KEY_PIE_CONTROL_CUSTOM_KEY);
 
             mPrefGbThemeDark = (CheckBoxPreference) findPreference(PREF_KEY_GB_THEME_DARK);
             File file = new File(getActivity().getFilesDir() + "/" + FILE_THEME_DARK_FLAG);
@@ -824,6 +843,7 @@ public class GravityBoxSettings extends Activity implements GravityBoxResultRece
             mPrefNavbarHeightLandscape = (SeekBarPreference) findPreference(PREF_KEY_NAVBAR_HEIGHT_LANDSCAPE);
             mPrefNavbarWidth = (SeekBarPreference) findPreference(PREF_KEY_NAVBAR_WIDTH);
             mPrefNavbarMenukey = (CheckBoxPreference) findPreference(PREF_KEY_NAVBAR_MENUKEY);
+            mPrefNavbarLauncherEnable = (CheckBoxPreference) findPreference(PREF_KEY_NAVBAR_LAUNCHER_ENABLE);
 
             mPrefLockscreenTargetsApp = new AppPickerPreference[5];
             for (int i=0; i<=4; i++) {
@@ -855,6 +875,20 @@ public class GravityBoxSettings extends Activity implements GravityBoxResultRece
             mPrefSbLockPolicy = (ListPreference) findPreference(PREF_KEY_STATUSBAR_LOCK_POLICY);
             mPrefDataTrafficPosition = (ListPreference) findPreference(PREF_KEY_DATA_TRAFFIC_POSITION);
             mPrefDataTrafficSize = (ListPreference) findPreference(PREF_KEY_DATA_TRAFFIC_SIZE);
+
+            mPrefCatAppLauncher = (PreferenceScreen) findPreference(PREF_CAT_KEY_APP_LAUNCHER);
+            mPrefAppLauncherSlot = new AppPickerPreference[PREF_KEY_APP_LAUNCHER_SLOT.size()];
+            for (int i = 0; i < mPrefAppLauncherSlot.length; i++) {
+                AppPickerPreference appPref = new AppPickerPreference(getActivity(), null);
+                appPref.setKey(PREF_KEY_APP_LAUNCHER_SLOT.get(i));
+                appPref.setTitle(String.format(
+                        getActivity().getString(R.string.pref_app_launcher_slot_title), i + 1));
+                appPref.setDialogTitle(appPref.getTitle());
+                appPref.setDefaultSummary(getActivity().getString(R.string.app_picker_none));
+                appPref.setSummary(getActivity().getString(R.string.app_picker_none));
+                mPrefAppLauncherSlot[i] = appPref;
+                mPrefCatAppLauncher.addPreference(mPrefAppLauncherSlot[i]);
+            }
 
             // Remove Phone specific preferences on Tablet devices
             if (sSystemProperties.isTablet) {
@@ -1214,6 +1248,7 @@ public class GravityBoxSettings extends Activity implements GravityBoxResultRece
                 mPrefNavbarHeightLandscape.setEnabled(override && mPrefNavbarEnable.isChecked());
                 mPrefNavbarWidth.setEnabled(override && mPrefNavbarEnable.isChecked());
                 mPrefNavbarMenukey.setEnabled(override && mPrefNavbarEnable.isChecked());
+                mPrefNavbarLauncherEnable.setEnabled(override && mPrefNavbarEnable.isChecked());
             }
 
             if (key == null || key.equals(PREF_KEY_LOCKSCREEN_TARGETS_ENABLE)) {
@@ -1271,6 +1306,10 @@ public class GravityBoxSettings extends Activity implements GravityBoxResultRece
 
             if (key == null || key.equals(PREF_KEY_STATUSBAR_SIGNAL_COLOR_MODE)) {
                 mPrefSbSignalColorMode.setSummary(mPrefSbSignalColorMode.getEntry());
+            }
+
+            if (key == null || key.equals(PREF_KEY_PIE_CONTROL_CUSTOM_KEY)) {
+                mPrefPieCustomKey.setSummary(mPrefPieCustomKey.getEntry());
             }
         }
 
@@ -1453,9 +1492,10 @@ public class GravityBoxSettings extends Activity implements GravityBoxResultRece
                 if (mode == 0) {
                     intent.putExtra(EXTRA_PIE_HWKEYS_DISABLE, false);
                 }
-            } else if (key.equals(PREF_KEY_PIE_CONTROL_SEARCH)) {
+            } else if (key.equals(PREF_KEY_PIE_CONTROL_CUSTOM_KEY)) {
                 intent.setAction(ACTION_PREF_PIE_CHANGED);
-                intent.putExtra(EXTRA_PIE_SEARCH, prefs.getBoolean(PREF_KEY_PIE_CONTROL_SEARCH, false));
+                intent.putExtra(EXTRA_PIE_CUSTOM_KEY_MODE, Integer.valueOf( 
+                        prefs.getString(PREF_KEY_PIE_CONTROL_CUSTOM_KEY, "0")));
             } else if (key.equals(PREF_KEY_PIE_CONTROL_MENU)) {
                 intent.setAction(ACTION_PREF_PIE_CHANGED);
                 intent.putExtra(EXTRA_PIE_MENU, prefs.getBoolean(PREF_KEY_PIE_CONTROL_MENU, false));
@@ -1514,6 +1554,15 @@ public class GravityBoxSettings extends Activity implements GravityBoxResultRece
             } else if (key.equals(PREF_KEY_NAVBAR_MENUKEY)) {
                 intent.setAction(ACTION_PREF_NAVBAR_CHANGED);
                 intent.putExtra(EXTRA_NAVBAR_MENUKEY, prefs.getBoolean(PREF_KEY_NAVBAR_MENUKEY, false));
+            } else if (key.equals(PREF_KEY_NAVBAR_LAUNCHER_ENABLE)) {
+                intent.setAction(ACTION_PREF_NAVBAR_CHANGED);
+                intent.putExtra(EXTRA_NAVBAR_LAUNCHER_ENABLE,
+                        prefs.getBoolean(PREF_KEY_NAVBAR_LAUNCHER_ENABLE, false));
+            } else if (PREF_KEY_APP_LAUNCHER_SLOT.contains(key)) {
+                intent.setAction(ACTION_PREF_APP_LAUNCHER_CHANGED);
+                intent.putExtra(EXTRA_APP_LAUNCHER_SLOT,
+                        PREF_KEY_APP_LAUNCHER_SLOT.indexOf(key));
+                intent.putExtra(EXTRA_APP_LAUNCHER_APP, prefs.getString(key, null));
             } else if (key.equals(PREF_KEY_STATUSBAR_BRIGHTNESS)) {
                 intent.setAction(ACTION_PREF_STATUSBAR_BRIGHTNESS_CHANGED);
                 intent.putExtra(EXTRA_SB_BRIGHTNESS, prefs.getBoolean(PREF_KEY_STATUSBAR_BRIGHTNESS, false));
