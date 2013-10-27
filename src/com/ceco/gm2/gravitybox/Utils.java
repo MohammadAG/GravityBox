@@ -52,6 +52,7 @@ public class Utils {
     private static Boolean mHasVibrator = null;
     private static Boolean mHasFlash = null;
     private static Boolean mHasGPS = null;
+    private static Boolean mHasNFC = null;
 
     // Supported MTK devices
     private static final Set<String> MTK_DEVICES = new HashSet<String>(Arrays.asList(
@@ -212,6 +213,20 @@ public class Utils {
             mHasGPS = null;
             return false;
         }
+    }
+
+    public static boolean hasNFC(Context con) {
+        if (mHasNFC != null) return mHasNFC;
+        PackageManager pm = con.getPackageManager();
+        if (pm == null) {
+            if (DEBUG) log("Cannot get package manager, assuming no NFC feature");
+            mHasNFC = null;
+            return false;
+        }
+
+        mHasNFC = pm.hasSystemFeature(PackageManager.FEATURE_NFC);
+
+        return mHasNFC;
     }
 
     public static String getDeviceCharacteristics() {

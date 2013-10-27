@@ -31,6 +31,7 @@ import com.ceco.gm2.gravitybox.quicksettings.AQuickSettingsTile;
 import com.ceco.gm2.gravitybox.quicksettings.ExpandedDesktopTile;
 import com.ceco.gm2.gravitybox.quicksettings.GpsTile;
 import com.ceco.gm2.gravitybox.quicksettings.NetworkModeTile;
+import com.ceco.gm2.gravitybox.quicksettings.NfcTile;
 import com.ceco.gm2.gravitybox.quicksettings.QuickAppTile;
 import com.ceco.gm2.gravitybox.quicksettings.QuickRecordTile;
 import com.ceco.gm2.gravitybox.quicksettings.RingerModeTile;
@@ -152,7 +153,8 @@ public class ModQuickSettings {
             R.id.stay_awake_tileview,
             R.id.screenshot_tileview,
             R.id.gps_tileview,
-            R.id.ringer_mode_tileview
+            R.id.ringer_mode_tileview,
+            R.id.nfc_tileview
         ));
         if (Utils.isMtkDevice()) {
             mCustomGbTileKeys.add(R.id.wifi_tileview);
@@ -593,6 +595,12 @@ public class ModQuickSettings {
                     GpsTile gpsTile = new GpsTile(mContext, mGbContext, mStatusBar, mPanelBar);
                     gpsTile.setupQuickSettingsTile(mContainerView, inflater, mPrefs);
                     mTiles.add(gpsTile);
+                }
+                
+                if (Utils.hasNFC(mContext)) {
+                    NfcTile nfcTile = new NfcTile(mContext, mGbContext, mStatusBar, mPanelBar);
+                    nfcTile.setupQuickSettingsTile(mContainerView, inflater);
+                    mTiles.add(nfcTile);
                 }
 
                 RingerModeTile rmTile = new RingerModeTile(mContext, mGbContext, mStatusBar, mPanelBar);
