@@ -34,6 +34,7 @@ import android.content.res.Resources;
 import android.hardware.input.InputManager;
 import android.os.Build;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.Process;
 import android.os.SystemClock;
@@ -96,12 +97,15 @@ public class ModHwKeys {
     private static boolean mHwKeysEnabled = true;
     private static XSharedPreferences mPrefs;
     private static AppLauncher mAppLauncher;
+    private static int mPieMode;
+    private static int mExpandedDesktopMode;
 
     private static List<String> mKillIgnoreList = new ArrayList<String>(Arrays.asList(
             "com.android.systemui",
             "com.mediatek.bluetooth",
             "android.process.acore",
-            "com.google.process.gapps"
+            "com.google.process.gapps",
+            "com.android.smspush"
     ));
 
     private static void log(String message) {
@@ -189,9 +193,13 @@ public class ModHwKeys {
                 mVolumeRockerWakeDisabled = intent.getBooleanExtra(
                         GravityBoxSettings.EXTRA_VOLUME_ROCKER_WAKE_DISABLE, false);
                 if (DEBUG) log("mVolumeRockerWakeDisabled set to: " + mVolumeRockerWakeDisabled);
-            } else if (action.equals(GravityBoxSettings.ACTION_PREF_PIE_CHANGED) && 
-                    intent.hasExtra(GravityBoxSettings.EXTRA_PIE_HWKEYS_DISABLE)) {
-                mHwKeysEnabled = !intent.getBooleanExtra(GravityBoxSettings.EXTRA_PIE_HWKEYS_DISABLE, false);
+            } else if (action.equals(GravityBoxSettings.ACTION_PREF_PIE_CHANGED)) {
+                if (intent.hasExtra(GravityBoxSettings.EXTRA_PIE_HWKEYS_DISABLE)) {
+                    mHwKeysEnabled = !intent.getBooleanExtra(GravityBoxSettings.EXTRA_PIE_HWKEYS_DISABLE, false);
+                }
+                if (intent.hasExtra(GravityBoxSettings.EXTRA_PIE_ENABLE)) {
+                    mPieMode = intent.getIntExtra(GravityBoxSettings.EXTRA_PIE_ENABLE, 0);
+                }
             } else if (action.equals(ACTION_SCREENSHOT) && mPhoneWindowManager != null) {
                 try {
                     XposedHelpers.callMethod(mPhoneWindowManager, "takeScreenshot");
@@ -213,6 +221,9 @@ public class ModHwKeys {
                 } catch (Throwable t) {
                     log("Error executing PhoneWindowManager.showGlobalActionsDialog(): " + t.getMessage());
                 }
+            } else if (action.equals(GravityBoxSettings.ACTION_PREF_EXPANDED_DESKTOP_MODE_CHANGED)) {
+                mExpandedDesktopMode = intent.getIntExtra(
+                        GravityBoxSettings.EXTRA_ED_MODE, GravityBoxSettings.ED_DISABLED);
             }
         }
     };
@@ -250,6 +261,21 @@ public class ModHwKeys {
                     GravityBoxSettings.PREF_KEY_VOLUME_ROCKER_WAKE_DISABLE, false);
             mHwKeysEnabled = !prefs.getBoolean(GravityBoxSettings.PREF_KEY_HWKEYS_DISABLE, false);
 
+            mPieMode = ModPieControls.PIE_DISABLED;
+            try {
+                mPieMode = Integer.valueOf(prefs.getString(GravityBoxSettings.PREF_KEY_PIE_CONTROL_ENABLE, "0"));
+            } catch (NumberFormatException nfe) {
+                log("Invalid preference value for Pie Mode");
+            }
+
+            mExpandedDesktopMode = GravityBoxSettings.ED_DISABLED;
+            try {
+                mExpandedDesktopMode = Integer.valueOf(prefs.getString(
+                        GravityBoxSettings.PREF_KEY_EXPANDED_DESKTOP, "0"));
+            } catch (NumberFormatException nfe) {
+                log("Invalid value for PREF_KEY_EXPANDED_DESKTOP preference");
+            }
+
             final Class<?> classPhoneWindowManager = XposedHelpers.findClass(CLASS_PHONE_WINDOW_MANAGER, null);
             classActivityManagerNative = XposedHelpers.findClass(CLASS_ACTIVITY_MANAGER_NATIVE, null);
 
@@ -272,6 +298,16 @@ public class ModHwKeys {
                     boolean keyguardOn = (Boolean) XposedHelpers.callMethod(mPhoneWindowManager, "keyguardOn");
                     Handler handler = (Handler) XposedHelpers.getObjectField(param.thisObject, "mHandler");
 
+                    if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
+                        if (!down) {
+                            handler.removeCallbacks(mResetBrightnessRunnable);
+                        } else {
+                            if (event.getRepeatCount() == 0) {
+                                handler.postDelayed(mResetBrightnessRunnable, 7000);
+                            }
+                        }
+                    }
+
                     if (mVolumeRockerWakeDisabled && 
                             (keyCode == KeyEvent.KEYCODE_VOLUME_UP ||
                                     keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)) {
@@ -290,7 +326,7 @@ public class ModHwKeys {
                                 param.setResult(0);
                                 return;
                             }
-                            if (!mHwKeysEnabled && 
+                            if (!areHwKeysEnabled() && 
                                     event.getRepeatCount() == 0 &&
                                     (event.getFlags() & KeyEvent.FLAG_FROM_SYSTEM) != 0) {
                                if (DEBUG) log("HOME KeyEvent coming from HW key and keys disabled. Ignoring.");
@@ -329,7 +365,7 @@ public class ModHwKeys {
                     if (DEBUG) log("keyCode=" + keyCode);
 
                     if (keyCode == KeyEvent.KEYCODE_MENU) {
-                        if (!hasAction(HwKey.MENU) && mHwKeysEnabled) return;
+                        if (!hasAction(HwKey.MENU) && areHwKeysEnabled()) return;
 
                         if (!down) {
                             mHandler.removeCallbacks(mMenuLongPress);
@@ -337,7 +373,7 @@ public class ModHwKeys {
                                 param.setResult(-1);
                                 return;
                             }
-                            if (!mHwKeysEnabled &&
+                            if (!areHwKeysEnabled() &&
                                     event.getRepeatCount() == 0 && 
                                     ((event.getFlags() & KeyEvent.FLAG_FROM_SYSTEM) != 0)) {
                                 if (DEBUG) log("MENU KeyEvent coming from HW key and keys disabled. Ignoring.");
@@ -374,7 +410,7 @@ public class ModHwKeys {
                     }
 
                     if (keyCode == KeyEvent.KEYCODE_BACK) {
-                        if (!hasAction(HwKey.BACK) && mHwKeysEnabled) return;
+                        if (!hasAction(HwKey.BACK) && areHwKeysEnabled()) return;
 
                         if (!down) {
                             mHandler.removeCallbacks(mBackLongPress);
@@ -382,7 +418,7 @@ public class ModHwKeys {
                                 param.setResult(-1);
                                 return;
                             }
-                            if (!mHwKeysEnabled &&
+                            if (!areHwKeysEnabled() &&
                                     event.getRepeatCount() == 0 && 
                                     ((event.getFlags() & KeyEvent.FLAG_FROM_SYSTEM) != 0)) {
                                 if (DEBUG) log("BACK KeyEvent coming from HW key and keys disabled. Ignoring.");
@@ -404,11 +440,18 @@ public class ModHwKeys {
                     }
 
                     if (keyCode == KeyEvent.KEYCODE_APP_SWITCH) {
-                        if (!hasAction(HwKey.RECENTS)) return;
+                        if (!hasAction(HwKey.RECENTS) && areHwKeysEnabled()) return;
 
                         if (!down) {
                             mHandler.removeCallbacks(mRecentsLongPress);
                             if (!mIsRecentsLongPressed) {
+                                if (!areHwKeysEnabled() &&
+                                        event.getRepeatCount() == 0 && 
+                                        ((event.getFlags() & KeyEvent.FLAG_FROM_SYSTEM) != 0)) {
+                                    if (DEBUG) log("APP_SWITCH KeyEvent coming from HW key and keys disabled. Ignoring.");
+                                    param.setResult(-1);
+                                    return;
+                                }
                                 if (mRecentsSingletapAction != GravityBoxSettings.HWKEY_ACTION_DEFAULT) {
                                     performAction(HwKeyTrigger.RECENTS_SINGLETAP);
                                 } else {
@@ -518,11 +561,17 @@ public class ModHwKeys {
             intentFilter.addAction(ACTION_SCREENSHOT);
             intentFilter.addAction(ACTION_SHOW_POWER_MENU);
             intentFilter.addAction(GravityBoxSettings.ACTION_PREF_DISPLAY_ALLOW_ALL_ROTATIONS_CHANGED);
+            intentFilter.addAction(GravityBoxSettings.ACTION_PREF_EXPANDED_DESKTOP_MODE_CHANGED);
             mContext.registerReceiver(mBroadcastReceiver, intentFilter);
 
             if (DEBUG) log("Phone window manager initialized");
         }
     };
+
+    private static boolean areHwKeysEnabled() {
+        return (mHwKeysEnabled ||
+                  !ModPieControls.isPieEnabled(mContext, mPieMode, mExpandedDesktopMode));
+    }
 
     private static Runnable mMenuLongPress = new Runnable() {
 
@@ -570,6 +619,32 @@ public class ModHwKeys {
             if (DEBUG) log("mHomeLongPressKeyguard runnable launched");
             mIsHomeLongPressed = true;
             performAction(HwKeyTrigger.HOME_LONGPRESS_KEYGUARD);
+        }
+    };
+
+    private static Runnable mResetBrightnessRunnable = new Runnable() {
+
+        @Override
+        public void run() {
+            try {
+                Class<?> classSm = XposedHelpers.findClass("android.os.ServiceManager", null);
+                Class<?> classIpm = XposedHelpers.findClass("android.os.IPowerManager.Stub", null);
+                IBinder b = (IBinder) XposedHelpers.callStaticMethod(
+                        classSm, "getService", Context.POWER_SERVICE);
+                Object power = XposedHelpers.callStaticMethod(classIpm, "asInterface", b);
+                if (power != null) {
+                    Settings.System.putInt(mContext.getContentResolver(),
+                            Settings.System.SCREEN_BRIGHTNESS_MODE, 0);
+                    final String bcMethod = Build.VERSION.SDK_INT > 16 ?
+                            "setTemporaryScreenBrightnessSettingOverride" : "setBacklightBrightness";
+                    XposedHelpers.callMethod(power, bcMethod, 100);
+                    Settings.System.putInt(mContext.getContentResolver(),
+                            Settings.System.SCREEN_BRIGHTNESS, 100);
+                    if (DEBUG) log("Screen brightness reset to manual with level set to 100");
+                }
+            } catch (Throwable t) {
+                XposedBridge.log(t);
+            }
         }
     };
 

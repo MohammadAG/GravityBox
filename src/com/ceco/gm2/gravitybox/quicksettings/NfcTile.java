@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.nfc.NfcAdapter;
+import android.nfc.NfcManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -127,11 +128,6 @@ public class NfcTile extends AQuickSettingsTile {
         }
     }
 
-    @Override
-    public void updateResources() {
-        updateTile(getNfcState());
-    }
-
     private int getNfcState() {
         log("getNfcState()");
         int state = STATE_OFF;
@@ -164,7 +160,8 @@ public class NfcTile extends AQuickSettingsTile {
         if (mNfcAdapter == null) {
             log("tryToGetNfcAdapter: adapter was indeed null");
             try {
-                mNfcAdapter = (NfcAdapter) XposedHelpers.callStaticMethod(NfcAdapter.class, "getNfcAdapter", mContext);
+                NfcManager manager = (NfcManager) mContext.getSystemService(Context.NFC_SERVICE);
+                mNfcAdapter = manager.getDefaultAdapter();
                 log("tryToGetNfcAdapter: we got an adapter! Is it null? " + String.valueOf(mNfcAdapter == null));
             } catch (UnsupportedOperationException e) {
                 if (!suppressThrow)

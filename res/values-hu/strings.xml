@@ -96,7 +96,7 @@
 	<string name="quick_settings_wifi">Wi-Fi</string>
     <string name="quick_settings_wifi_off">Wi-Fi kikapcsolva</string>
     <string name="quick_settings_wifi_not_connected">Nincs csatlakozva</string>
-	<string name="quick_settings_wifi_turning_on">Bekapcsolás...</string>
+	<string name="quick_settings_wifi_turning_on">Bekapcsolás&#8230;</string>
 	
     <!--  QuickSettings settings -->
     <string name="quick_settings_title">Állapotsáv Gyorsbeállítások csempéi</string>
@@ -134,7 +134,7 @@
 
     <!--  Statusbar background color -->
     <string name="statusbar_bgcolor_title">Állapotsáv háttérszín</string>
-    <string name="statusbar_bgcolor_summary">Lehetővé teszi, hogy beállíthassa az Állapotsáv háttérszínét és átlátszóságát</string>
+    <string name="statusbar_bgcolor_summary">Lehetővé teszi az Állapotsáv háttérszínének a beállítását</string>
 
     <!--  Fix speech settings -->
     <string name="fix_tts_settings_title">Javítja a beszéd beállításokat</string>
@@ -400,9 +400,9 @@
     <string name="pref_holo_bg_dither_title">Nagyobb színmélységű Holo háttér</string>
     <string name="pref_holo_bg_dither_summary">Lecseréli a szabvány Holo hátteret nagyobb színmélységű típusra a színátmenetek folyamatosságának megtörése ellen (újraindítás szükséges)</string>
 
-    <!-- Disable hardware keys for pie -->
-    <string name="pref_hwkeys_disable_title">Hardver gombok letiltása</string>
-    <string name="pref_hwkeys_disable_summary">Letiltja a MENÜ, VISSZA, KEZDŐLAP gombokat, ha a Pie Vezérlők engedélyezve vannak. A HW gombok műveletei működni fognak. (HW gombokkal ellátot eszközök esetén)</string>
+    <!-- Disable navigation keys for pie -->
+    <string name="pref_hwkeys_disable_title">Navigációs gombok letiltása</string>
+    <string name="pref_hwkeys_disable_summary">Letiltja a gombok egyszeri érintését, ha a Pie Vezérlők engedélyezve vannak</string>
 
     <!-- Option for GB dark theme -->
     <string name="pref_gb_theme_dark_title">Holo Sötét téma használata</string>
@@ -718,5 +718,38 @@
     <string name="signal_color_mode_gb">Használja a GravityBox ikonokat (jelerősség szint támogatással)</string>
     <string name="signal_color_mode_stock">Használja a gyári ikonokat (jelerősség szint támogatás nélkül)</string>
     <string name="signal_color_mode_disabled">Nem alkalmaz színezést</string>
+	
+	<!-- Application launcher -->
+    <string name="pref_cat_app_launcher_title">Alkalmazás Indító</string>
+    <string name="pref_cat_app_launcher_summary">Alkalmazás ablak 8 beállítható applikációval, melynek a megjelenítése hozzárendelhető hardver gomb művelethez vagy egy külön navigációs sáv gombhoz</string>
+    <string name="pref_app_launcher_slot_title">Alkalmazás hely %d</string>
+    <string name="app_launcher_no_apps">Nincs beállítva alkalmazás. Applikációk hozzárendeléséhez használja a GravityBox / Alkalmazás Indító menüt. </string>
+
+    <!-- Navigation bar app launcher key -->
+    <string name="pref_navbar_launcher_enable_title">Alkalmazás Indító gomb mutatása</string>
+
+    <!-- HW Key Actions: application launcher -->
+    <string name="hwkey_action_app_launcher">Alkalmazás Indító megjelenítése</string>
+
+    <!-- Pie custom key -->
+    <string name="pref_pie_control_custom_key_title">Egyéni gomb mutatása</string>
+    <string name="pie_custom_key_off">Letiltva</string>
+    <string name="pie_custom_key_search">Keresés</string>
+    <string name="pie_custom_key_app_launcher">Alkalmazás Indító</string>
+	
+    <!-- Pie colors -->
+    <string name="pref_cat_pie_colors_title">Pie színek</string>
+    <string name="pref_pie_color_bg_title">Háttérszín</string>
+    <string name="pref_pie_color_fg_title">Előtérszín</string>
+    <string name="pref_pie_color_outline_title">Körvonal színe</string>
+    <string name="pref_pie_color_selected_title">Kiválasztott gomb színe</string>
+    <string name="pref_pie_color_text_title">Szöveg színe</string>
+    <string name="pref_pie_color_reset_title">Színek visszaállítása</string>
+
+    <!-- Custom unknown caller photo -->
+    <string name="pref_caller_unknown_photo_enable_title">Ismeretlen hívó fotó engedélyezése</string>
+    <string name="pref_caller_unknown_photo_title">Ismeretlen hívó fotó beállítása</string>
+    <string name="caller_unknown_photo_result_successful">Fotó megváltoztatva</string>
+    <string name="caller_unkown_photo_result_not_successful">Fotó nincs megváltoztatva</string>
 	
 </resources>

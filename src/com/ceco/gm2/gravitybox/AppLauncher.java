@@ -170,6 +170,7 @@ public class AppLauncher {
                 tv.setCompoundDrawablesWithIntrinsicBounds(null, ai.getAppIcon(), null, null);
                 tv.setClickable(true);
                 tv.setOnClickListener(mAppOnClick);
+                tv.setVisibility(View.VISIBLE);
 
                 appRow1Visible |= ai.getResId() == R.id.quickapp1 || ai.getResId() == R.id.quickapp2 || 
                         ai.getResId() == R.id.quickapp3 || ai.getResId() == R.id.quickapp4;
@@ -222,6 +223,7 @@ public class AppLauncher {
     };
 
     private void startActivity(Context context, Intent intent) {
+        intent.setAction(Intent.ACTION_MAIN);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         context.startActivity(intent);
     }
