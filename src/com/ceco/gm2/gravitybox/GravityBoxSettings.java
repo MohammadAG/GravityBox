@@ -122,12 +122,16 @@ public class GravityBoxSettings extends Activity implements GravityBoxResultRece
     public static final String PREF_KEY_FIX_CALENDAR = "pref_fix_calendar";
     public static final String PREF_CAT_KEY_STATUSBAR = "pref_cat_statusbar";
     public static final String PREF_CAT_KEY_STATUSBAR_QS = "pref_cat_statusbar_qs";
+    public static final String PREF_CAT_KEY_STATUSBAR_COLORS = "pref_cat_statusbar_colors";
     public static final String PREF_KEY_STATUSBAR_BGCOLOR = "pref_statusbar_bgcolor2";
     public static final String PREF_KEY_DISABLE_STATUSBAR_BGCOLOR = "pref_disable_statusbar_bgcolor2";
     public static final String PREF_KEY_STATUSBAR_COLOR_FOLLOW_STOCK_BATTERY = "pref_sbcolor_follow_stock_battery";
     public static final String PREF_KEY_STATUSBAR_ICON_COLOR_ENABLE = "pref_statusbar_icon_color_enable";
     public static final String PREF_KEY_STATUSBAR_ICON_COLOR = "pref_statusbar_icon_color";
+    public static final String PREF_KEY_STATUSBAR_ICON_COLOR_SECONDARY = "pref_statusbar_icon_color_secondary";
     public static final String PREF_KEY_STATUSBAR_DATA_ACTIVITY_COLOR = "pref_statusbar_data_activity_color";
+    public static final String PREF_KEY_STATUSBAR_DATA_ACTIVITY_COLOR_SECONDARY = 
+            "pref_statusbar_data_activity_color_secondary";
     public static final String PREF_KEY_STATUSBAR_COLOR_SKIP_BATTERY = "pref_statusbar_color_skip_battery";
     public static final String PREF_KEY_STATUSBAR_SIGNAL_COLOR_MODE = "pref_statusbar_signal_color_mode";
     public static final String PREF_KEY_STATUSBAR_CENTER_CLOCK = "pref_statusbar_center_clock";
@@ -140,6 +144,7 @@ public class GravityBoxSettings extends Activity implements GravityBoxResultRece
     public static final String PREF_KEY_STATUSBAR_CLOCK_HIDE = "pref_clock_hide";
     public static final String PREF_KEY_STATUSBAR_CLOCK_LINK = "pref_clock_link_app";
     public static final String PREF_KEY_ALARM_ICON_HIDE = "pref_alarm_icon_hide";
+    public static final String PREF_KEY_TM_MODE = "pref_tm_mode";
     public static final String PREF_KEY_TM_STATUSBAR_LAUNCHER = "pref_tm_statusbar_launcher";
     public static final String PREF_KEY_TM_STATUSBAR_LOCKSCREEN = "pref_tm_statusbar_lockscreen";
     public static final String PREF_KEY_TM_NAVBAR_LAUNCHER = "pref_tm_navbar_launcher";
@@ -164,6 +169,7 @@ public class GravityBoxSettings extends Activity implements GravityBoxResultRece
     public static final String PREF_KEY_LOCKSCREEN_BACKGROUND = "pref_lockscreen_background";
     public static final String PREF_KEY_LOCKSCREEN_BACKGROUND_COLOR = "pref_lockscreen_bg_color";
     public static final String PREF_KEY_LOCKSCREEN_BACKGROUND_IMAGE = "pref_lockscreen_bg_image";
+    public static final String PREF_KEY_LOCKSCREEN_SHADE_DISABLE = "pref_lockscreen_shade_disable";
     public static final String LOCKSCREEN_BG_DEFAULT = "default";
     public static final String LOCKSCREEN_BG_COLOR = "color";
     public static final String LOCKSCREEN_BG_IMAGE = "image";
@@ -354,7 +360,9 @@ public class GravityBoxSettings extends Activity implements GravityBoxResultRece
     public static final String EXTRA_SB_COLOR_FOLLOW = "sbColorFollow";
     public static final String EXTRA_SB_ICON_COLOR_ENABLE = "iconColorEnable";
     public static final String EXTRA_SB_ICON_COLOR = "iconColor";
+    public static final String EXTRA_SB_ICON_COLOR_SECONDARY = "iconColorSecondary";
     public static final String EXTRA_SB_DATA_ACTIVITY_COLOR = "dataActivityColor";
+    public static final String EXTRA_SB_DATA_ACTIVITY_COLOR_SECONDARY = "dataActivityColorSecondary";
     public static final String EXTRA_SB_COLOR_SKIP_BATTERY = "skipBattery";
     public static final String EXTRA_SB_SIGNAL_COLOR_MODE = "signalColorMode";
     public static final String EXTRA_TM_SB_LAUNCHER = "tmSbLauncher";
@@ -379,6 +387,9 @@ public class GravityBoxSettings extends Activity implements GravityBoxResultRece
     public static final String ACTION_PREF_SAFE_MEDIA_VOLUME_CHANGED = "gravitybox.intent.action.SAFE_MEDIA_VOLUME_CHANGED";
     public static final String EXTRA_SAFE_MEDIA_VOLUME_ENABLED = "enabled";
 
+    public static final String PREF_CAT_KEY_NAVBAR_KEYS = "pref_cat_navbar_keys";
+    public static final String PREF_CAT_KEY_NAVBAR_COLOR = "pref_cat_navbar_color";
+    public static final String PREF_CAT_KEY_NAVBAR_DIMEN = "pref_cat_navbar_dimen";
     public static final String PREF_KEY_NAVBAR_OVERRIDE = "pref_navbar_override";
     public static final String PREF_KEY_NAVBAR_ENABLE = "pref_navbar_enable";
     public static final String PREF_KEY_NAVBAR_HEIGHT = "pref_navbar_height";
@@ -386,12 +397,20 @@ public class GravityBoxSettings extends Activity implements GravityBoxResultRece
     public static final String PREF_KEY_NAVBAR_WIDTH = "pref_navbar_width";
     public static final String PREF_KEY_NAVBAR_MENUKEY = "pref_navbar_menukey";
     public static final String PREF_KEY_NAVBAR_LAUNCHER_ENABLE = "pref_navbar_launcher_enable";
+    public static final String PREF_KEY_NAVBAR_COLOR_ENABLE = "pref_navbar_color_enable";
+    public static final String PREF_KEY_NAVBAR_KEY_COLOR = "pref_navbar_key_color";
+    public static final String PREF_KEY_NAVBAR_KEY_GLOW_COLOR = "pref_navbar_key_glow_color";
+    public static final String PREF_KEY_NAVBAR_BG_COLOR = "pref_navbar_bg_color";
     public static final String ACTION_PREF_NAVBAR_CHANGED = "gravitybox.intent.action.ACTION_NAVBAR_CHANGED";
     public static final String EXTRA_NAVBAR_HEIGHT = "navbarHeight";
     public static final String EXTRA_NAVBAR_HEIGHT_LANDSCAPE = "navbarHeightLandscape";
     public static final String EXTRA_NAVBAR_WIDTH = "navbarWidth";
     public static final String EXTRA_NAVBAR_MENUKEY = "navbarMenukey";
     public static final String EXTRA_NAVBAR_LAUNCHER_ENABLE = "navbarLauncherEnable";
+    public static final String EXTRA_NAVBAR_COLOR_ENABLE = "navbarColorEnable";
+    public static final String EXTRA_NAVBAR_KEY_COLOR = "navbarKeyColor";
+    public static final String EXTRA_NAVBAR_KEY_GLOW_COLOR = "navbarKeyGlowColor";
+    public static final String EXTRA_NAVBAR_BG_COLOR = "navbarBgColor";
 
     public static final String PREF_KEY_LOCKSCREEN_TARGETS_ENABLE = "pref_lockscreen_ring_targets_enable";
     public static final String PREF_KEY_LOCKSCREEN_TARGETS_APP[] = new String[] {
@@ -481,7 +500,8 @@ public class GravityBoxSettings extends Activity implements GravityBoxResultRece
             PREF_KEY_NAVBAR_OVERRIDE,
             PREF_KEY_NAVBAR_ENABLE,
             PREF_KEY_QS_TILE_BEHAVIOUR_OVERRIDE,
-            PREF_KEY_UNPLUG_TURNS_ON_SCREEN
+            PREF_KEY_UNPLUG_TURNS_ON_SCREEN,
+            PREF_KEY_TM_MODE
     ));
 
     private static final class SystemProperties {
@@ -687,11 +707,10 @@ public class GravityBoxSettings extends Activity implements GravityBoxResultRece
         private PreferenceScreen mPrefCatMedia;
         private CheckBoxPreference mPrefSafeMediaVolume;
         private ListPreference mPrefExpandedDesktop;
+        private PreferenceCategory mPrefCatNavbarKeys;
+        private PreferenceCategory mPrefCatNavbarColor;
+        private PreferenceCategory mPrefCatNavbarDimen;
         private CheckBoxPreference mPrefNavbarEnable;
-        private SeekBarPreference mPrefNavbarHeight;
-        private SeekBarPreference mPrefNavbarHeightLandscape;
-        private SeekBarPreference mPrefNavbarWidth;
-        private CheckBoxPreference mPrefNavbarMenukey;
         private CheckBoxPreference mPrefMusicVolumeSteps;
         private AppPickerPreference[] mPrefLockscreenTargetsApp;
         private SeekBarPreference mPrefLockscreenTargetsVerticalOffset;
@@ -718,11 +737,17 @@ public class GravityBoxSettings extends Activity implements GravityBoxResultRece
         private CheckBoxPreference mPrefVolumePanelAutoexpand;
         private CheckBoxPreference mPrefHomeDoubletapDisable;
         private PreferenceScreen mPrefCatAppLauncher;
-        private CheckBoxPreference mPrefNavbarLauncherEnable;
         private AppPickerPreference[] mPrefAppLauncherSlot;
         private File callerPhotoFile;
         private CheckBoxPreference mPrefCallerUnknownPhotoEnable;
         private Preference mPrefCallerUnknownPhoto;
+        private SeekBarPreference mPrefTmSbLauncher;
+        private SeekBarPreference mPrefTmSbLockscreen;
+        private SeekBarPreference mPrefTmNbLauncher;
+        private SeekBarPreference mPrefTmNbLockscreen;
+        private PreferenceScreen mPrefCatStatusbarColors;
+        private ColorPickerPreference mPrefSbIconColorSecondary;
+        private ColorPickerPreference mPrefSbDaColorSecondary;
 
         @SuppressWarnings("deprecation")
         @Override
@@ -819,6 +844,7 @@ public class GravityBoxSettings extends Activity implements GravityBoxResultRece
             mPrefFixDevOpts = (CheckBoxPreference) findPreference(PREF_KEY_FIX_DEV_OPTS);
             mPrefCatStatusbar = (PreferenceScreen) findPreference(PREF_CAT_KEY_STATUSBAR);
             mPrefCatStatusbarQs = (PreferenceScreen) findPreference(PREF_CAT_KEY_STATUSBAR_QS);
+            mPrefCatStatusbarColors = (PreferenceScreen) findPreference(PREF_CAT_KEY_STATUSBAR_COLORS);
             mPrefAutoSwitchQs = (CheckBoxPreference) findPreference(PREF_KEY_QUICK_SETTINGS_AUTOSWITCH);
             mPrefQuickPulldown = (ListPreference) findPreference(PREF_KEY_QUICK_PULLDOWN);
 
@@ -874,12 +900,10 @@ public class GravityBoxSettings extends Activity implements GravityBoxResultRece
 
             mPrefExpandedDesktop = (ListPreference) findPreference(PREF_KEY_EXPANDED_DESKTOP);
 
+            mPrefCatNavbarKeys = (PreferenceCategory) findPreference(PREF_CAT_KEY_NAVBAR_KEYS);
+            mPrefCatNavbarColor = (PreferenceCategory) findPreference(PREF_CAT_KEY_NAVBAR_COLOR);
+            mPrefCatNavbarDimen = (PreferenceCategory) findPreference(PREF_CAT_KEY_NAVBAR_DIMEN);
             mPrefNavbarEnable = (CheckBoxPreference) findPreference(PREF_KEY_NAVBAR_ENABLE);
-            mPrefNavbarHeight = (SeekBarPreference) findPreference(PREF_KEY_NAVBAR_HEIGHT);
-            mPrefNavbarHeightLandscape = (SeekBarPreference) findPreference(PREF_KEY_NAVBAR_HEIGHT_LANDSCAPE);
-            mPrefNavbarWidth = (SeekBarPreference) findPreference(PREF_KEY_NAVBAR_WIDTH);
-            mPrefNavbarMenukey = (CheckBoxPreference) findPreference(PREF_KEY_NAVBAR_MENUKEY);
-            mPrefNavbarLauncherEnable = (CheckBoxPreference) findPreference(PREF_KEY_NAVBAR_LAUNCHER_ENABLE);
 
             mPrefLockscreenTargetsApp = new AppPickerPreference[5];
             for (int i=0; i<=4; i++) {
@@ -927,6 +951,14 @@ public class GravityBoxSettings extends Activity implements GravityBoxResultRece
                 mPrefAppLauncherSlot[i] = appPref;
                 mPrefCatAppLauncher.addPreference(mPrefAppLauncherSlot[i]);
             }
+
+            mPrefTmSbLauncher = (SeekBarPreference) findPreference(PREF_KEY_TM_STATUSBAR_LAUNCHER);
+            mPrefTmSbLockscreen = (SeekBarPreference) findPreference(PREF_KEY_TM_STATUSBAR_LOCKSCREEN);
+            mPrefTmNbLauncher = (SeekBarPreference) findPreference(PREF_KEY_TM_NAVBAR_LAUNCHER);
+            mPrefTmNbLockscreen = (SeekBarPreference) findPreference(PREF_KEY_TM_NAVBAR_LOCKSCREEN);
+
+            mPrefSbIconColorSecondary = (ColorPickerPreference) findPreference(PREF_KEY_STATUSBAR_ICON_COLOR_SECONDARY);
+            mPrefSbDaColorSecondary = (ColorPickerPreference) findPreference(PREF_KEY_STATUSBAR_DATA_ACTIVITY_COLOR_SECONDARY);
 
             // Remove Phone specific preferences on Tablet devices
             if (sSystemProperties.isTablet) {
@@ -980,6 +1012,8 @@ public class GravityBoxSettings extends Activity implements GravityBoxResultRece
                     mPrefCatStatusbar.removePreference(mPrefDisableRoamingIndicators);
                     mPrefCatPhoneMobileData.removePreference(mPrefMobileDataSlow2gDisable);
                     mPrefCatStatusbarQs.removePreference(mPrefQsNetworkModeSimSlot);
+                    mPrefCatStatusbarColors.removePreference(mPrefSbIconColorSecondary);
+                    mPrefCatStatusbarColors.removePreference(mPrefSbDaColorSecondary);
                 }
 
                 // Remove preferences not needed for ZTE V987
@@ -1215,6 +1249,8 @@ public class GravityBoxSettings extends Activity implements GravityBoxResultRece
                 mPrefSbDaColor.setEnabled(mPrefSbIconColorEnable.isChecked());
                 mPrefSbColorSkipBattery.setEnabled(mPrefSbIconColorEnable.isChecked());
                 mPrefSbSignalColorMode.setEnabled(mPrefSbIconColorEnable.isChecked());
+                mPrefSbIconColorSecondary.setEnabled(mPrefSbIconColorEnable.isChecked());
+                mPrefSbDaColorSecondary.setEnabled(mPrefSbIconColorEnable.isChecked());
             }
 
             if (key == null || key.equals(PREF_KEY_NOTIF_BACKGROUND)) {
@@ -1282,11 +1318,9 @@ public class GravityBoxSettings extends Activity implements GravityBoxResultRece
                     || key.equals(PREF_KEY_NAVBAR_ENABLE)) {
                 final boolean override = mPrefs.getBoolean(PREF_KEY_NAVBAR_OVERRIDE, false);
                 mPrefNavbarEnable.setEnabled(override);
-                mPrefNavbarHeight.setEnabled(override && mPrefNavbarEnable.isChecked());
-                mPrefNavbarHeightLandscape.setEnabled(override && mPrefNavbarEnable.isChecked());
-                mPrefNavbarWidth.setEnabled(override && mPrefNavbarEnable.isChecked());
-                mPrefNavbarMenukey.setEnabled(override && mPrefNavbarEnable.isChecked());
-                mPrefNavbarLauncherEnable.setEnabled(override && mPrefNavbarEnable.isChecked());
+                mPrefCatNavbarKeys.setEnabled(override && mPrefNavbarEnable.isChecked());
+                mPrefCatNavbarColor.setEnabled(override && mPrefNavbarEnable.isChecked());
+                mPrefCatNavbarDimen.setEnabled(override && mPrefNavbarEnable.isChecked());
             }
 
             if (key == null || key.equals(PREF_KEY_LOCKSCREEN_TARGETS_ENABLE)) {
@@ -1354,6 +1388,14 @@ public class GravityBoxSettings extends Activity implements GravityBoxResultRece
             if (key == null || key.equals(PREF_KEY_CALLER_UNKNOWN_PHOTO_ENABLE)) {
                 mPrefCallerUnknownPhoto.setEnabled(mPrefCallerUnknownPhotoEnable.isChecked());
             }
+
+            if (key == null || key.equals(PREF_KEY_TM_MODE)) {
+                final int tmMode = Integer.valueOf(mPrefs.getString(PREF_KEY_TM_MODE, "3"));
+                mPrefTmSbLauncher.setEnabled((tmMode & TransparencyManager.MODE_STATUSBAR) != 0);
+                mPrefTmSbLockscreen.setEnabled((tmMode & TransparencyManager.MODE_STATUSBAR) != 0);
+                mPrefTmNbLauncher.setEnabled((tmMode & TransparencyManager.MODE_NAVBAR) != 0);
+                mPrefTmNbLockscreen.setEnabled((tmMode & TransparencyManager.MODE_NAVBAR) != 0);
+            }
         }
 
         @Override
@@ -1402,10 +1444,19 @@ public class GravityBoxSettings extends Activity implements GravityBoxResultRece
                 intent.setAction(ACTION_PREF_STATUSBAR_COLOR_CHANGED);
                 intent.putExtra(EXTRA_SB_ICON_COLOR, prefs.getInt(PREF_KEY_STATUSBAR_ICON_COLOR, 
                         getResources().getInteger(R.integer.COLOR_HOLO_BLUE_LIGHT)));
+            } else if (key.equals(PREF_KEY_STATUSBAR_ICON_COLOR_SECONDARY)) {
+                intent.setAction(ACTION_PREF_STATUSBAR_COLOR_CHANGED);
+                intent.putExtra(EXTRA_SB_ICON_COLOR_SECONDARY, 
+                        prefs.getInt(PREF_KEY_STATUSBAR_ICON_COLOR_SECONDARY, 
+                        getResources().getInteger(R.integer.COLOR_HOLO_BLUE_LIGHT)));
             } else if (key.equals(PREF_KEY_STATUSBAR_DATA_ACTIVITY_COLOR)) {
                 intent.setAction(ACTION_PREF_STATUSBAR_COLOR_CHANGED);
                 intent.putExtra(EXTRA_SB_DATA_ACTIVITY_COLOR,
                         prefs.getInt(PREF_KEY_STATUSBAR_DATA_ACTIVITY_COLOR, Color.WHITE));
+            } else if (key.equals(PREF_KEY_STATUSBAR_DATA_ACTIVITY_COLOR_SECONDARY)) {
+                intent.setAction(ACTION_PREF_STATUSBAR_COLOR_CHANGED);
+                intent.putExtra(EXTRA_SB_DATA_ACTIVITY_COLOR_SECONDARY,
+                        prefs.getInt(PREF_KEY_STATUSBAR_DATA_ACTIVITY_COLOR_SECONDARY, Color.WHITE));
             } else if (key.equals(PREF_KEY_STATUSBAR_COLOR_SKIP_BATTERY)) {
                 intent.setAction(ACTION_PREF_STATUSBAR_COLOR_CHANGED);
                 intent.putExtra(EXTRA_SB_COLOR_SKIP_BATTERY,
@@ -1625,6 +1676,25 @@ public class GravityBoxSettings extends Activity implements GravityBoxResultRece
                 intent.setAction(ACTION_PREF_NAVBAR_CHANGED);
                 intent.putExtra(EXTRA_NAVBAR_LAUNCHER_ENABLE,
                         prefs.getBoolean(PREF_KEY_NAVBAR_LAUNCHER_ENABLE, false));
+            } else if (key.equals(PREF_KEY_NAVBAR_COLOR_ENABLE)) {
+                intent.setAction(ACTION_PREF_NAVBAR_CHANGED);
+                intent.putExtra(EXTRA_NAVBAR_COLOR_ENABLE,
+                        prefs.getBoolean(PREF_KEY_NAVBAR_COLOR_ENABLE, false)); 
+            } else if (key.equals(PREF_KEY_NAVBAR_KEY_COLOR)) {
+                intent.setAction(ACTION_PREF_NAVBAR_CHANGED);
+                intent.putExtra(EXTRA_NAVBAR_KEY_COLOR,
+                        prefs.getInt(PREF_KEY_NAVBAR_KEY_COLOR, 
+                                getResources().getColor(R.color.navbar_key_color)));
+            } else if (key.equals(PREF_KEY_NAVBAR_KEY_GLOW_COLOR)) {
+                intent.setAction(ACTION_PREF_NAVBAR_CHANGED);
+                intent.putExtra(EXTRA_NAVBAR_KEY_GLOW_COLOR,
+                        prefs.getInt(PREF_KEY_NAVBAR_KEY_GLOW_COLOR, 
+                                getResources().getColor(R.color.navbar_key_glow_color)));
+            } else if (key.equals(PREF_KEY_NAVBAR_BG_COLOR)) {
+                intent.setAction(ACTION_PREF_NAVBAR_CHANGED);
+                intent.putExtra(EXTRA_NAVBAR_BG_COLOR,
+                        prefs.getInt(PREF_KEY_NAVBAR_BG_COLOR, 
+                                getResources().getColor(R.color.navbar_bg_color)));
             } else if (PREF_KEY_APP_LAUNCHER_SLOT.contains(key)) {
                 intent.setAction(ACTION_PREF_APP_LAUNCHER_CHANGED);
                 intent.putExtra(EXTRA_APP_LAUNCHER_SLOT,

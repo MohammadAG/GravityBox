@@ -238,10 +238,10 @@
     <string name="hwkey_action_search">Cerca</string>
     <string name="hwkey_action_voice_search">Ricerca vocale</string>
     <string name="hwkey_action_prev_app">Passa alla app precedente</string>
-    <string name="hwkey_action_kill">Killa app corrente</string>
+    <string name="hwkey_action_kill">Chiusura forzata app corrente</string>
     <string name="hwkey_action_sleep">Vai in sleep</string>
-    <string name="pref_hwkey_kill_delay_title">Durata per Kill app su pressione lunga</string>
-    <string name="pref_hwkey_kill_delay_summary">Si applica per il Kill della app corrente. Definisce quanto a lungo deve rimanere premuto il tasto per fare la kill</string>
+    <string name="pref_hwkey_kill_delay_title">Durata per chiudura forzata app su pressione lunga</string>
+    <string name="pref_hwkey_kill_delay_summary">Si applica per la chiudura forzata dell\'app corrente. Definisce quanto a lungo deve rimanere premuto il tasto per fare la chiusura forzata</string>
     <string name="pref_hwkey_doubletap_speed_title">Velocità doppio-tap</string>
     <string name="pref_hwkey_doubletap_speed_summary">Si applica per il doppio-tap del tasto MENU. Definisce quanto velocemente deve avvenire il secondo tap</string>
     <string name="app_killed">%s terminata</string>
@@ -660,7 +660,7 @@
     <string name="pref_volume_panel_autoexpand_title">Espandi automaticamente</string>
 
     <!-- HW Key Actions: Preference screen arrangement -->
-    <string name="pref_cat_hwkey_menu_title">Tatso Menu</string>
+    <string name="pref_cat_hwkey_menu_title">Tasto Menu</string>
     <string name="pref_cat_hwkey_home_title">Tasto Home</string>
     <string name="pref_cat_hwkey_back_title">Tasto Indietro</string>
     <string name="pref_cat_hwkey_recents_title">Tasto Recenti</string>
@@ -702,7 +702,7 @@
     <string name="pref_pie_color_bg_title">Colore sfondo</string>
     <string name="pref_pie_color_fg_title">Colore primo piano</string>
     <string name="pref_pie_color_outline_title">Colore sottolineatura</string>
-    <string name="pref_pie_color_selected_title">Key selected color</string>
+    <string name="pref_pie_color_selected_title">Colore tasto selezionato</string>
     <string name="pref_pie_color_text_title">Colore testo</string>
     <string name="pref_pie_color_reset_title">Reset colori</string>
 
@@ -716,5 +716,18 @@
     <string name="screen_brightness_min_warning">Il tuo schermo potrebbe non supportare valori inferiori a 20. Se il tuo schermo non si accende, 
         tieni premuto il tasto Volume+ per almeno 7 secondi per resettare l\'impostazione luminosità e poi reimposta la luminosità con un valore superiore.</string>
 
+    <!-- Navbar tweaks categories -->
+    <string name="pref_cat_navbar_general_title">Generali</string>
+    <string name="pref_cat_navbar_keys_title">Tasti navigazione</string>
+    <string name="pref_cat_navbar_color_title">Colore e trasparenze</string>
+    <string name="pref_cat_navbar_dimen_title">Dimensioni</string>
 
+    <!-- Navigation bar colors -->
+    <string name="pref_navbar_key_color_title">Colore tasto navigazione</string>
+    <string name="pref_navbar_key_glow_color_title">Colore tasto navigazione evidenziato</string>
+    <string name="pref_navbar_bg_color_title">Colore sfondo tasto navigazione</string>
+
+    <!-- Disable lockscreen shade -->
+    <string name="pref_lockscreen_shade_disable_title">Disattiva ombreggiatura lockcreen</string>
+    <string name="pref_lockscreen_shade_disable_summary">Rimuovi tinte scure nel lockscreen</string>
 </resources>

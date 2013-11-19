@@ -20,6 +20,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
@@ -42,7 +45,7 @@ public class ModNavigationBar {
     private static final String CLASS_KEY_BUTTON_VIEW = "com.android.systemui.statusbar.policy.KeyButtonView";
 
     private static boolean mAlwaysShowMenukey;
-    private static Object mNavigationBarView;
+    private static View mNavigationBarView;
     private static Object[] mRecentsKeys;
     private static HomeKeyInfo[] mHomeKeys;
     private static int mRecentsSingletapAction = 0;
@@ -56,6 +59,16 @@ public class ModNavigationBar {
     private static Context mGbContext;
     private static AppLauncher mAppLauncher;
     private static NavbarViewInfo[] mNavbarViewInfo = new NavbarViewInfo[2];
+
+    // Colors
+    private static boolean mNavbarColorsEnabled;
+    private static int mKeyDefaultColor = 0xe8ffffff;
+    private static int mKeyDefaultGlowColor = 0x40ffffff;
+    private static int mNavbarDefaultBgColor = 0xff000000;
+    private static int mKeyColor;
+    private static int mKeyGlowColor;
+    private static int mNavbarBgColor;
+    private static Integer mNavbarBgColorOriginal;
 
     private static void log(String message) {
         XposedBridge.log(TAG + ": " + message);
@@ -98,6 +111,27 @@ public class ModNavigationBar {
                     mAppLauncherEnabled = intent.getBooleanExtra(
                             GravityBoxSettings.EXTRA_NAVBAR_LAUNCHER_ENABLE, false);
                     setAppKeyVisibility(mAppLauncherEnabled);
+                }
+                if (intent.hasExtra(GravityBoxSettings.EXTRA_NAVBAR_KEY_COLOR)) {
+                    mKeyColor = intent.getIntExtra(
+                            GravityBoxSettings.EXTRA_NAVBAR_KEY_COLOR, mKeyDefaultColor);
+                    setKeyColor();
+                }
+                if (intent.hasExtra(GravityBoxSettings.EXTRA_NAVBAR_KEY_GLOW_COLOR)) {
+                    mKeyGlowColor = intent.getIntExtra(
+                            GravityBoxSettings.EXTRA_NAVBAR_KEY_GLOW_COLOR, mKeyDefaultGlowColor);
+                    setKeyColor();
+                }
+                if (intent.hasExtra(GravityBoxSettings.EXTRA_NAVBAR_BG_COLOR)) {
+                    mNavbarBgColor = intent.getIntExtra(
+                            GravityBoxSettings.EXTRA_NAVBAR_BG_COLOR, mNavbarDefaultBgColor);
+                    setNavbarBgColor();
+                }
+                if (intent.hasExtra(GravityBoxSettings.EXTRA_NAVBAR_COLOR_ENABLE)) {
+                    mNavbarColorsEnabled = intent.getBooleanExtra(
+                            GravityBoxSettings.EXTRA_NAVBAR_COLOR_ENABLE, false);
+                    setNavbarBgColor();
+                    setKeyColor();
                 }
             } else if (intent.getAction().equals(
                     GravityBoxSettings.ACTION_PREF_HWKEY_RECENTS_SINGLETAP_CHANGED)) {
@@ -148,12 +182,23 @@ public class ModNavigationBar {
                     if (context == null) return;
 
                     mResources = context.getResources();
+
                     mGbContext = context.createPackageContext(
                             GravityBox.PACKAGE_NAME, Context.CONTEXT_IGNORE_SECURITY);
+                    final Resources res = mGbContext.getResources();
+                    mNavbarColorsEnabled = prefs.getBoolean(GravityBoxSettings.PREF_KEY_NAVBAR_COLOR_ENABLE, false);
+                    mKeyDefaultColor = res.getColor(R.color.navbar_key_color);
+                    mKeyColor = prefs.getInt(GravityBoxSettings.PREF_KEY_NAVBAR_KEY_COLOR, mKeyDefaultColor);
+                    mKeyDefaultGlowColor = res.getColor(R.color.navbar_key_glow_color);
+                    mKeyGlowColor = prefs.getInt(
+                            GravityBoxSettings.PREF_KEY_NAVBAR_KEY_GLOW_COLOR, mKeyDefaultGlowColor);
+                    mNavbarDefaultBgColor = res.getColor(R.color.navbar_bg_color);
+                    mNavbarBgColor = prefs.getInt(
+                            GravityBoxSettings.PREF_KEY_NAVBAR_BG_COLOR, mNavbarDefaultBgColor);
 
                     mAppLauncher = new AppLauncher(context, prefs);
 
-                    mNavigationBarView = param.thisObject;
+                    mNavigationBarView = (View) param.thisObject;
                     IntentFilter intentFilter = new IntentFilter();
                     intentFilter.addAction(GravityBoxSettings.ACTION_PREF_NAVBAR_CHANGED);
                     intentFilter.addAction(GravityBoxSettings.ACTION_PREF_HWKEY_RECENTS_SINGLETAP_CHANGED);
@@ -245,6 +290,7 @@ public class ModNavigationBar {
                     setAppKeyVisibility(mAppLauncherEnabled);
                     updateRecentsKeyCode();
                     updateHomeKeyLongpressSupport();
+                    setNavbarBgColor();
                 }
             });
 
@@ -269,6 +315,20 @@ public class ModNavigationBar {
                         visible &= v.getVisibility() == View.VISIBLE;
                     }
                     setAppKeyVisibility(visible);
+                }
+            });
+
+            XposedHelpers.findAndHookMethod(navbarViewClass, "setNavigationIconHints",
+                    int.class, boolean.class, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    if (mNavbarColorsEnabled) {
+                        final int navigationIconHints = XposedHelpers.getIntField(
+                                param.thisObject, "mNavigationIconHints");
+                        if ((Integer) param.args[0] != navigationIconHints || (Boolean)param.args[1]) {
+                            setKeyColor();
+                        }
+                    }
                 }
             });
         } catch(Throwable t) {
@@ -415,4 +475,73 @@ public class ModNavigationBar {
             }
         }
     };
+
+    private static void setKeyColor() {
+        try {
+            View v = (View) XposedHelpers.getObjectField(mNavigationBarView, "mCurrentView");
+            ViewGroup navButtons = (ViewGroup) v.findViewById(
+                    mResources.getIdentifier("nav_buttons", "id", PACKAGE_NAME));
+            final int childCount = navButtons.getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                if (navButtons.getChildAt(i) instanceof ImageView) {
+                    ImageView imgv = (ImageView)navButtons.getChildAt(i);
+                    if (mNavbarColorsEnabled) {
+                        imgv.setColorFilter(mKeyColor, PorterDuff.Mode.SRC_ATOP);
+                    } else {
+                        imgv.clearColorFilter();
+                    }
+                    if (imgv.getClass().getName().equals(CLASS_KEY_BUTTON_VIEW)) {
+                        Drawable d = (Drawable) XposedHelpers.getObjectField(imgv, "mGlowBG");
+                        if (d != null) {
+                            if (mNavbarColorsEnabled) {
+                                d.setColorFilter(mKeyGlowColor, PorterDuff.Mode.SRC_ATOP);
+                            } else {
+                                d.clearColorFilter();
+                            }
+                        }
+                    } else if (imgv instanceof KeyButtonView) {
+                        ((KeyButtonView) imgv).setGlowColor(mKeyGlowColor);
+                    }
+                }
+            }
+        } catch (Throwable t) {
+            XposedBridge.log(t);
+        }
+    }
+
+    private static void setNavbarBgColor() {
+        try {
+            if (!mNavbarColorsEnabled) {
+                if (mNavbarBgColorOriginal != null) {
+                    ColorDrawable cd = new ColorDrawable(mNavbarBgColorOriginal);
+                    mNavigationBarView.setBackground(cd);
+                    if (DEBUG) log("Restored navbar background original color");
+                }
+            } else {
+                if (mNavbarBgColorOriginal == null && 
+                        (mNavigationBarView.getBackground() instanceof ColorDrawable)) {
+                    mNavbarBgColorOriginal = 
+                            ((ColorDrawable) mNavigationBarView.getBackground()).getColor();
+                    if (DEBUG) log("Saved navbar background original color");
+                }
+                if (Utils.isXperiaDevice()) {
+                    if (!(mNavigationBarView.getBackground() instanceof ColorDrawable)) {
+                        ColorDrawable colorDrawable = new ColorDrawable(mNavbarBgColor);
+                        mNavigationBarView.setBackground(colorDrawable);
+                    } else {
+                        ((ColorDrawable) mNavigationBarView.getBackground()).setColor(mNavbarBgColor);
+                    }
+                } else {
+                    if (!(mNavigationBarView.getBackground() instanceof BackgroundAlphaColorDrawable)) {
+                        BackgroundAlphaColorDrawable colorDrawable = new BackgroundAlphaColorDrawable(mNavbarBgColor);
+                        mNavigationBarView.setBackground(colorDrawable);
+                    } else {
+                        ((BackgroundAlphaColorDrawable) mNavigationBarView.getBackground()).setBgColor(mNavbarBgColor);
+                    }
+                }
+            }
+        } catch (Throwable t) {
+            XposedBridge.log(t);
+        }
+    }
 }

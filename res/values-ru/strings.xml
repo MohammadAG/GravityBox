@@ -308,9 +308,13 @@
     <string name="pref_volume_panel_expandable_title">Расширяемая звуковая панель</string>
     <string name="pref_volume_panel_expandable_summary">Включает расширяемую звуковую панель, на которой можно менять звук для разных потоков</string>
 
+    <!-- Fully expandable volume panel -->
+    <string name="pref_volume_panel_expandable_fully_title">Полностью расширяемая панель громкости</string>
+    <string name="pref_volume_panel_expandable_fully_summary">Позволяет ползунку громкости занимать все доступное пространство</string>
+    
     <!-- Link ringtone & notifications volumes -->
     <string name="pref_link_volumes_title">Связать громкость рингтона и уведомлений</string>
-    <string name="pref_link_volumes_summary">Когда отключено, громкость уведомлений и ренгтона можно задавать независимо</string>
+    <string name="pref_link_volumes_summary">Когда отключено, громкость уведомлений и рингтона можно задавать независимо</string>
 
     <!-- Auto-switch QuickSettings -->
     <string name="pref_auto_switch_qs_title">Автовключение быстрых настроек</string>
@@ -460,6 +464,7 @@
 
     <!-- Transparency management -->
     <string name="pref_cat_transparency_manager_title">Управление прозрачностью</string>
+    <string name="pref_cat_transparency_manager_summary">Управляет прозрачностью статусбара и панели навигации</string>
     <string name="pref_tm_statusbar_launcher_title">Статусбар для ланчера</string>
     <string name="pref_tm_statusbar_lockscreen_title">Статусбара для экрана блокировки</string>
     <string name="pref_tm_navbar_launcher_title">Панель навиг. для ланчера</string>
@@ -611,7 +616,7 @@
 
     <!-- Mute volume adjust sound -->
     <string name="pref_volume_adjust_mute_title">Откл. звук рег. громкости</string>
-    <string name="pref_volume_adjust_mute_summary">Отключает звук, проигрываемы при регулеровке громкости</string>
+    <string name="pref_volume_adjust_mute_summary">Отключает звук, проигрываемы при регулировке громкости</string>
 
     <!-- Call vibrations -->
     <string name="pref_call_vibrations_title">Вибрация звонка</string>
@@ -755,5 +760,36 @@
     <!-- Minimum screen brightness warning -->
     <string name="screen_brightness_min_warning">Ваш экран может не поддерживать значения меньше 20. Если ваш экран не засветится,
         зажмите кнопку Громкость+ как минимум на 7 секунд для сброса яркости и затем исправьте значение яркости на большее.</string>
+    
+    <!-- Navbar tweaks categories -->
+    <string name="pref_cat_navbar_general_title">Общие</string>
+    <string name="pref_cat_navbar_keys_title">Кнопки навигации</string>
+    <string name="pref_cat_navbar_color_title">Цвет и прозрачность</string>
+    <string name="pref_cat_navbar_dimen_title">Размеры</string>
+
+    <!-- Navigation bar colors -->
+    <string name="pref_navbar_color_enable_title">Включить цвета панели навигации</string>
+    <string name="pref_navbar_color_enable_summary">Может потребоваться перезагрузка после отключения</string>
+    <string name="pref_navbar_key_color_title">Цвет кнопок навигации</string>
+    <string name="pref_navbar_key_glow_color_title">Цвет тени кнопок навигации</string>
+    <string name="pref_navbar_bg_color_title">Цвет фона панели навигации</string>
+
+    <!-- Disable lockscreen shade -->
+    <string name="pref_lockscreen_shade_disable_title">Отключить тень экрана блокировки</string>
+    <string name="pref_lockscreen_shade_disable_summary">Удаляет темный оттенок с экрана блокировки</string>
+    
+     <!-- Transparency manager mode -->
+    <string name="pref_tm_mode_title">Режим настройки прозрачности</string>
+    <string name="pref_tm_mode_summary">Необходима перезагрузка</string>
+    <string name="tm_mode_disabled">Отключено</string>
+    <string name="tm_mode_statusbar">Статусбар</string>
+    <string name="tm_mode_navbar">Панель навигации</string>
+    <string name="tm_mode_full">Оба</string>
+
+    <!-- Secondary signal icon color for MTK Dual SIMs -->
+    <string name="pref_statusbar_icon_color_secondary_title">Цвет вторичного значка сигнала</string>
+    <string name="pref_statusbar_icon_color_secondary_summary">Заменяет стандартный оранжевый цвет значка</string>
+    <string name="pref_statusbar_data_activity_color_secondary_title">Цвет активности данных</string>
+    <string name="pref_statusbar_data_activity_color_secondary_summary">Задает увет для индикатора активности данных</string>
     
 </resources>

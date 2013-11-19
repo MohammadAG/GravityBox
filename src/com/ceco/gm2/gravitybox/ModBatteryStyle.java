@@ -85,7 +85,9 @@ public class ModBatteryStyle {
 
     public static void initResources(XSharedPreferences prefs, InitPackageResourcesParam resparam) {
         try {
-            String layout = Utils.hasGeminiSupport() ? "gemini_super_status_bar" : "super_status_bar";
+            final String layout = Utils.hasGeminiSupport() ? "gemini_super_status_bar" : "super_status_bar";
+            final String[] batteryPercentTextIds = new String[] { "percentage", "battery_text" };
+
             resparam.res.hookLayout(PACKAGE_NAME, "layout", layout, new XC_LayoutInflated() {
 
                 @Override
@@ -95,23 +97,32 @@ public class ModBatteryStyle {
                             liparam.res.getIdentifier("signal_battery_cluster", "id", PACKAGE_NAME));
 
                     // inject percent text if it doesn't exist
-                    mPercentText = (TextView) vg.findViewById(liparam.res.getIdentifier(
-                            "percentage", "id", PACKAGE_NAME));
+                    for (String bptId : batteryPercentTextIds) {
+                        final int bptResId = liparam.res.getIdentifier(
+                                bptId, "id", PACKAGE_NAME);
+                        if (bptResId != 0) {
+                            View v = vg.findViewById(bptResId);
+                            if (v != null && v instanceof TextView) {
+                                mPercentText = (TextView) v;
+                                mPercentText.setTag("percentage");
+                                if (DEBUG) log("Battery percent text found as: " + bptId);
+                                break;
+                            }
+                        }
+                    }
                     if (mPercentText == null) {
                         mPercentText = new TextView(vg.getContext());
                         mPercentText.setTag("percentage");
                         LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(
                             LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
                         mPercentText.setLayoutParams(lParams);
-                        mPercentText.setPadding(4, 0, 0, 0);
+                        mPercentText.setPadding(6, 0, 0, 0);
                         mPercentText.setTextSize(1, 16);
                         mPercentText.setTextColor(vg.getContext().getResources().getColor(
                                 android.R.color.holo_blue_dark));
                         mPercentText.setVisibility(View.GONE);
                         vg.addView(mPercentText);
                         if (DEBUG) log("Battery percent text injected");
-                    } else {
-                        mPercentText.setTag("percentage");
                     }
                     ModStatusbarColor.setPercentage(mPercentText);
 
