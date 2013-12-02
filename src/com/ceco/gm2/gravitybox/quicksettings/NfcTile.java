@@ -1,7 +1,5 @@
 package com.ceco.gm2.gravitybox.quicksettings;
 
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.XposedHelpers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,9 +11,9 @@ import android.widget.TextView;
 
 import com.ceco.gm2.gravitybox.R;
 
-public class NfcTile extends AQuickSettingsTile {
+import de.robv.android.xposed.XposedHelpers;
 
-    private static final boolean DEBUG = true;
+public class NfcTile extends AQuickSettingsTile {
 
     private static final String INTENT_ADAPTER_STATE_CHANGED = "android.nfc.action.ADAPTER_STATE_CHANGED";
     private static final String INTENT_NFC_SETTINGS = "android.settings.NFC_SETTINGS";
@@ -27,15 +25,10 @@ public class NfcTile extends AQuickSettingsTile {
     private static final int STATE_OFF = XposedHelpers.getStaticIntField(NfcAdapter.class, "STATE_OFF");
     private static final int NFC_ADAPTER_UNKNOWN = -100;
 
-    private static final String TAG = "GB:NfcTile";
+    @SuppressWarnings("unused")
+	private static final String TAG = "GB:NfcTile";
 
     private static NfcAdapter mNfcAdapter = null;
-
-    /* TODO: Remove log lines, the way we build the Strings uses operators and such */
-    private void log(String message) {
-        if (!DEBUG) return;
-        XposedBridge.log(TAG + ": " + message);
-    }
 
     private BroadcastReceiver mNfcStateChangedReceiver = new BroadcastReceiver() {
 
@@ -43,7 +36,7 @@ public class NfcTile extends AQuickSettingsTile {
         public void onReceive(Context context, Intent intent) {
             if (INTENT_ADAPTER_STATE_CHANGED.equals(intent.getAction())) {
                 if (mNfcAdapter == null)
-                    tryToGetNfcAdapter(true);
+                    getNfcAdapter(true);
                 updateTile(getNfcState());
             }
         }
@@ -53,7 +46,6 @@ public class NfcTile extends AQuickSettingsTile {
 
     public NfcTile(Context context, Context gbContext, Object statusBar, Object panelBar) {
         super(context, gbContext, statusBar, panelBar);
-        log("Initializing NFC tile");
 
         mOnClick = new View.OnClickListener() {
 
@@ -77,15 +69,13 @@ public class NfcTile extends AQuickSettingsTile {
     }
 
     private void toggleState() {
-        log("toggleState()");
         int state = getNfcState();
         /* For some reason, a switch-case way of handling this didn't work */
 
         if (mNfcAdapter == null)
-            tryToGetNfcAdapter(true);
+            getNfcAdapter(true);
 
         if (mNfcAdapter == null) {
-            log("toggleState(): mNfcAdapter is null, returning");
             return;
         }
 
@@ -133,20 +123,15 @@ public class NfcTile extends AQuickSettingsTile {
     }
 
     private int getNfcState() {
-        log("getNfcState()");
         int state = STATE_OFF;
         try {
-            tryToGetNfcAdapter(false);
+            getNfcAdapter(false);
         } catch (UnsupportedOperationException e) {
             state = NFC_ADAPTER_UNKNOWN;
         }
 
         if (mNfcAdapter != null)
             state = (Integer) XposedHelpers.callMethod(mNfcAdapter, "getAdapterState");
-        else
-            log("getNfcState(): mNfcAdapter is null");
-
-        log("getNfcAdapter(): state is " + String.valueOf(state));
 
         return state;
     }
@@ -159,19 +144,22 @@ public class NfcTile extends AQuickSettingsTile {
         super.onTilePostCreate();
     }
 
-    private void tryToGetNfcAdapter(boolean suppressThrow) throws UnsupportedOperationException {
-        log("tryToGetNfcAdapter()");
-        if (mNfcAdapter == null) {
-            log("tryToGetNfcAdapter: adapter was indeed null");
+    private void getNfcAdapter(boolean suppressThrow) throws UnsupportedOperationException {
+        Class<?> ServiceManager;
+        try {
+            ServiceManager = Class.forName("android.os.ServiceManager");
+        } catch (ClassNotFoundException e1) {
+            e1.printStackTrace();
+            return;
+        }
+        
+        if (mNfcAdapter == null && XposedHelpers.callStaticMethod(ServiceManager, "getService", "nfc") != null) {
             try {
-                mNfcAdapter = (NfcAdapter) XposedHelpers.callStaticMethod(NfcAdapter.class, "getNfcAdapter", mContext);
-                log("tryToGetNfcAdapter: we got an adapter! Is it null? " + String.valueOf(mNfcAdapter == null));
+                mNfcAdapter = NfcAdapter.getDefaultAdapter(mContext);
             } catch (UnsupportedOperationException e) {
                 if (!suppressThrow)
                     throw e;
             }
-        } else {
-            log("tryToGetNfcAdapter(): We already have an NFC adapter, returning");
         }
     }
 }
