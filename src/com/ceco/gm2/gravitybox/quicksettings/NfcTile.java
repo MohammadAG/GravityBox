@@ -26,7 +26,7 @@ public class NfcTile extends AQuickSettingsTile {
     private static final int NFC_ADAPTER_UNKNOWN = -100;
 
     @SuppressWarnings("unused")
-	private static final String TAG = "GB:NfcTile";
+    private static final String TAG = "GB:NfcTile";
 
     private static NfcAdapter mNfcAdapter = null;
 
@@ -115,11 +115,6 @@ public class NfcTile extends AQuickSettingsTile {
             mTextView.setText(mLabel);
             mTextView.setCompoundDrawablesWithIntrinsicBounds(0, mDrawableId, 0, 0);
         }
-    }
-
-    @Override
-    public void updateResources() {
-        updateTile(getNfcState());
     }
 
     private int getNfcState() {
